@@ -1,10 +1,8 @@
-import java.awt.font.NumericShaper;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-//Hello. If you can see this, then it worked!
 
 public class Main {
 
