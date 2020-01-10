@@ -75,3 +75,4 @@
 *.xml
 out
 .idea
+/tmp.png
