@@ -1,3 +1,5 @@
+import WebRequest.RequestType;
+import WebRequest.URL_Requester;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -5,10 +7,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+
 
 import java.util.ArrayList;
 
@@ -33,6 +38,8 @@ public class GUIWrapper extends Application {
         // Output Label
         Text output = new Text("");
 
+        CheckBox getWeb = new CheckBox("Use web lookup instead of offline calculator");
+
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -41,13 +48,22 @@ public class GUIWrapper extends Application {
                     ArrayList<Element> elementList = Main.readElements();
                     Tokenizer tokenizer = new Tokenizer(input, elementList);
                     Token first = tokenizer.nextToken();
-                    if (first instanceof NumberToken) {
-                        throw new InvalidExpressionException();
+
+                    if(getWeb.isSelected()) {
+                        URL_Requester url_requester = new URL_Requester(RequestType.FORMULA, inputChemical.getText());
+
+                        String line9 = url_requester.readURLs().split("\n")[8];
+                        line9 = line9.substring(22);
+
+                        output.setText((line9.substring(0, line9.length()-2)));
                     }
-
-                    ElementToken firstElement = (ElementToken) first;
-
-                    output.setText(Main.molecularCompound(tokenizer, firstElement));
+                    else {
+                        if (first instanceof NumberToken) {
+                            throw new InvalidExpressionException();
+                        }
+                        ElementToken firstElement = (ElementToken) first;
+                        output.setText(Main.molecularCompound(tokenizer, firstElement));
+                    }
                 } catch (InvalidExpressionException e1) {
                     output.setText("Cannot start chemical with number.");
                 } catch (Exception e2) {
@@ -63,6 +79,7 @@ public class GUIWrapper extends Application {
         gPane.add(inputChemical, 0, 1);
         gPane.add(submit, 1,1);
         gPane.add(output, 0, 2);
+        gPane.add(getWeb, 1, 2);
 
         // Padding
         gPane.setPadding(new Insets(10));
