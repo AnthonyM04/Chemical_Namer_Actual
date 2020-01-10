@@ -171,7 +171,7 @@ public class Main {
         //Deals with second element
             //Case if second element is unnumbered
         if (!tokenizer.hasMoreTokens()) {
-            name.append(" ").append(secondElement.element.getIdeName());
+            name.append(" Mono").append(secondElement.element.getIdeName().toLowerCase());
         }
             //Case if second element is numbered
         else /*if (firstElement.element.getType().equals("nonmetal"))*/ {
@@ -183,7 +183,11 @@ public class Main {
             name.append(" ").append(secondElement.element.getIdeName());
         }
         */
-
-        return name.toString();
+        if (tokenizer.hasMoreTokens()) {
+            throw new InvalidExpressionException("Compound too long for the program");
+        }
+        String out = name.toString();
+        out = out.replaceAll("Monooxide", "Monoxide");
+        return out;
     }
 }
