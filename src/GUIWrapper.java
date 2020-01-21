@@ -50,12 +50,20 @@ public class GUIWrapper extends Application {
                     Token first = tokenizer.nextToken();
 
                     if(getWeb.isSelected()) {
-                        URL_Requester url_requester = new URL_Requester(RequestType.FORMULA, inputChemical.getText());
+                        boolean went = false;
+                        while (!went) {
+                            try {
+                                URL_Requester url_requester = new URL_Requester(RequestType.FORMULA, inputChemical.getText());
 
-                        String line9 = url_requester.readURLs().split("\n")[8];
-                        line9 = line9.substring(22);
+                                String line9 = url_requester.readURLs().split("\n")[8];
+                                line9 = line9.substring(22);
 
-                        output.setText((line9.substring(0, line9.length()-2)));
+                                output.setText((line9.substring(0, line9.length() - 2)));
+
+                                went = true;
+                            } catch (NullPointerException e) {e.printStackTrace();}
+                        }
+
                     }
                     else {
                         if (first instanceof NumberToken) {
@@ -64,10 +72,9 @@ public class GUIWrapper extends Application {
                         ElementToken firstElement = (ElementToken) first;
                         output.setText(Main.molecularCompound(tokenizer, firstElement));
                     }
-                } catch (InvalidExpressionException e1) {
-                    output.setText("Cannot start chemical with number.");
                 } catch (Exception e2) {
-                    output.setText("File error");
+                    e2.printStackTrace();
+                    output.setText("Illegal or unknown chemical");
                 }
             }
         });
