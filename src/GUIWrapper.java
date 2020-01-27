@@ -55,7 +55,7 @@ public class GUIWrapper extends Application {
                         String line9 = url_requester.readURLs().split("\n")[8];
                         line9 = line9.substring(22);
 
-                        output.setText((line9.substring(0, line9.length()-2)));
+                        output.setText((line9.substring(0, line9.length()-1)));
                     }
                     else {
                         if (first instanceof NumberToken) {
